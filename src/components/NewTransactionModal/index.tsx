@@ -1,11 +1,11 @@
 import Modal from 'react-modal';
+import { FormEvent, useState } from 'react';
 
-import { Container, TransactionTypeContainer } from './styles';
+import { Container, TransactionTypeContainer, RadioBox } from './styles';
 
 import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
-
 
 Modal.setAppElement('#root');
 
@@ -15,7 +15,13 @@ interface NewTransactionModalProps {
 }
 
 export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionModalProps) {
- return (
+  const [ type,  setType ] = useState('deposit');
+
+  function handleCreateNewTransaction(event: FormEvent) {
+    event.preventDefault()
+  }
+
+  return (
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
@@ -29,7 +35,7 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
       >
         <img src={closeImg} alt="Fechar modal" />
       </button>
-      <Container>
+      <Container onSubmit={handleCreateNewTransaction}>
         <h2>Cadastrar transação</h2>
         <input 
           placeholder="Título"
@@ -40,19 +46,25 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
         />
 
         <TransactionTypeContainer>
-        <button
-          type="button"
+          <RadioBox
+            type="button"
+            onClick={() =>{ setType('deposit')}}
+            isActive={type === 'deposit'}
+            activeColor={'green'}
           >
             <img src={incomeImg} alt="Entrada" />
             <span>Entrada</span>
-          </button>
+          </RadioBox>
 
-          <button
-          type="button"
+          <RadioBox
+            type="button"
+            onClick={() =>{ setType('withdraw')}}
+            isActive={type === 'withdraw'}
+            activeColor={'red'}
           >
             <img src={outcomeImg} alt="Saída" />
             <span>Saída</span>
-          </button>
+          </RadioBox>
         </TransactionTypeContainer>
 
         <input 
